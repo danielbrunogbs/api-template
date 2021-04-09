@@ -13,6 +13,16 @@ app.use(express.json());
 
 app.use('/', Route.route);
 
-app.use((err, req, res, next) => res.status(500).send({ message: `${err.message}` }));
+app.use((err, req, res, next) => {
+
+	res.status(err.http_code ? err.http_code : 500);
+
+	res.header('Content-Type', 'application/json');
+
+	res.send({ message: err.message });
+
+	console.log(err);
+
+});
 
 app.listen(process.env.PORT || 8080);
